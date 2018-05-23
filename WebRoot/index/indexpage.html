@@ -1,0 +1,1130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+    <link rel="shortcut icon" href="images/favicon/favicon.png" type="image/x-icon">
+    <link rel="icon" href="images/favicon/favicon.png" type="image/x-icon">
+
+    <title>xx工厂水泥生产数据</title>
+	
+    <!--Library Styles-->    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/lib/nivo-lightbox.css" rel="stylesheet">
+    <link href="css/lib/nivo-themes/default/default.css" rel="stylesheet">
+	
+    <!--Template Styles-->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/scheme/purple.css" rel="stylesheet">
+
+
+</head>
+
+<body data-spy="scroll">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status"></div>
+    </div>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#" style="font-size:150%">烧成系统信息</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+		<a class="navbar-brand" href="#" style="font-size:150%">姓名</a><li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="main-wrapper">
+        
+        <!-- Site Navigation -->
+        <div id="menu">
+            <nav class="navbar navbar-default" role="navigation">
+
+                <div class="navbar-header">
+                    
+                    <a class="navbar-brand" href="index.html#">
+                        <img src="images/logo.png" alt="logo">
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a class="sscroll" href="index.html#home">烧成系统概览</a></li>
+                        <li><a class="sscroll" href="index.html#weiliao">入口温度详情</a></li>
+                        <li><a class="sscroll" href="index.html#chanliang">入口风压详情</a></li>
+                        <li><a class="sscroll" href="index.html#zaihe">分解炉氧气含量详情</a></li>
+                        <li><a class="sscroll" href="index.html#nenghao">窑尾温度详情</a></li>
+                        <li><a class="sscroll" href="index.html#dianyadianliu">窑头温度详情</a></li>
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </nav>
+        </div>
+        
+        <div id="container">
+            <!-- BEGIN HOME -->
+            <section id="home" class="home">
+                
+                <!-- Superslides -->
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="header-content">
+                        <h2>总览</h2>
+                    </div>
+                </div>
+                </div>
+
+                <script src="js/echarts.min.js"></script>
+                <script src="js/jquery-1.10.2.min.js"></script>
+                <div id="zonglan" style="weight:1200px;height:400px"></div>
+                <!-- ECharts单文件引入 -->
+
+                <script type="text/javascript">
+
+                            var myChart = echarts.init(document.getElementById('zonglan'));
+
+                            var option = {
+                            	title:{ text:'主要测量指标'
+                            	},
+                                tooltip: {
+                                	trigger:'axis',
+                                    show: true
+                                },
+                               color:[
+                   					'#FF3333',	//入口温度曲线颜色
+					                '#53FF53',	//窑尾温度曲线颜色
+					                '#B15BFF',	//一次风压图颜色
+					                '#68CFE8',	//窑头负压图颜色
+					                '#FFDC35',	//罩头温度曲线颜色
+					                '#4682B4'
+                 				  ],
+                                legend: {
+                                	
+                                	show:true,
+                                    data:['入口温度','窑尾温度','一次风压','窑头负压','窑头温度','入口压力']
+						    	 /*     {  
+								            	x:'center',  
+								          		data:['入口温度','窑尾温度','一次风压'],  
+								        },  
+								        {  
+								            x:'center',  
+								            top:'5%',  
+								            data:['窑头风压','罩头温度'],  
+								        }  */
+								        }, 
+
+                 				  
+                 				toolbox: {
+               						feature: {
+                 						dataView: {show: true, readOnly: false},
+                 						magicType: {show: true, type: ['line', 'bar']},
+                 						restore: {show: true},
+                 						saveAsImage: {show: true}
+               							}
+             						},
+             						
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        data : []
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        name : '温度',
+                                        axisLabel : {
+	                            			 formatter: '{value} ℃'	//控制输出格式
+	                         				}
+                                        
+                                    },
+                                    
+                                    {
+	                    				//第二个（右边）Y轴，yAxisIndex为1
+	                         			type : 'value',
+	                        	 		name : '压强',
+	                       				scale: true,
+	                       				axisLabel : {
+	                                    formatter: '{value} hPa'
+	                         				}	
+	                     			}
+                                ],
+                                series : [
+                                    {
+		                  			  name:'入口温度',
+		                    		  type:'line',	//折线图表示（生成温度曲线）
+		                    		  //symbol:'emptycircle',	//设置折线图中表示每个坐标点的符号；emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形	                    
+		                    		  data:[]		//数据值通过Ajax动态获取
+		                			},
+		                			
+		                			{
+		                    		  name:'窑尾温度',
+		                    		  type:'line',
+		                    		  //symbol:'emptyrect',
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		                    		  name:'一次风压',
+		                    		  type:'line',
+		                    		  //symbol:'emptyrect',
+		                    		  yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		                    		  name:'窑头负压',
+		                    		  type:'line',
+		                    		  //symbol:'emptyrect',
+		                    		  yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		              				  name:'窑头温度',
+		                    		  type:'line',
+		                    		  //symbol:'emptyrect',
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		              				  name:'入口压力',
+		                    		  type:'line',
+		                    		  symbol:'circle',
+		                    		  yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+                                ]
+                            };
+                            
+                       myChart.showLoading();	//数据加载完之前先显示一段简单的loading动画
+		 
+						 var rktems=[];		//入口温度数组（存放服务器返回的所有温度值）
+						 var ywtems=[];		//窑尾温度数组
+						 var ycpas=[];		//一次风压数组
+						 var ytpas=[];		//窑头风压数组
+						 var ytztems=[];	//罩头温度数组
+						 var rkyls=[];
+						 var dates=[];		//日期数组
+						 
+						 
+				         $.ajax({	//使用JQuery内置的Ajax方法
+				         type : "post",		//post请求方式
+				         async : true,		//异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+				         url : "/mkcenter/bar.do",	//请求发送到IndexServlet处
+				         data : {name:"A0001"},		//请求内包含一个key为name，value为A0001的参数；服务器接收到客户端请求时通过request.getParameter方法获取该参数值
+				         dataType: "json",//返回数据形式为json
+				         success : function(result){
+				        	 //请求成功时执行该函数内容，result即为服务器返回的json对象
+					         if (result != null) {
+					                for(var i=0;i<10;i++){       
+					                   rktems.push(result[i].l0001);		//挨个取出温度、湿度、压强等值并填入前面声明的温度、湿度、压强等数组
+					                   ywtems.push(result[i].l0013);
+					                   ycpas.push(result[i].l0014);
+					                   ytpas.push(result[i].l0015);
+					                   ytztems.push(result[i].l0027);
+					                   rkyls.push(result[i].l0003);
+					                   dates.push(result[i].dateStr);
+					                }
+					                myChart.hideLoading();	//隐藏加载动画
+					                
+					                myChart.setOption({		//载入数据
+					   		         xAxis: {
+					   		             data: dates	//填入X轴数据
+					   		         },
+					   		         series: [	//填入系列（内容）数据
+					   		               		{
+							   		             // 根据名字对应到相应的系列
+							   		             name: '入口温度',
+							   		             data: rktems
+					   		         		},
+					   		               		{
+							   		             name: '窑尾温度',
+							   		             data: ywtems
+					   		         		},
+					   		         			{
+							   		             name: '一次风压',
+							   		             data: ycpas
+					   		         		},
+					   		         			{
+							   		             name: '窑头负压',
+							   		             data: ytpas
+					   		         		},
+					   		         			{
+						   		             name: '窑头温度',
+						   		             data: ytztems
+				  		         			},
+					   		         			{
+						   		             name: '入口压力',
+						   		             data: rkyls
+				  		         			}
+				  		         			
+					   		        ]
+					   		     });
+					                
+					         }
+					         else {
+					        	 //返回的数据为空时显示提示信息
+					        	 alert("图表请求数据为空，可能服务器暂未录观测数据，您可以稍后再试！");
+					          	 myChart.hideLoading();
+					         }
+				         
+						},
+				     	error : function(errorMsg) {
+				     		//请求失败时执行该函数
+				         	alert("图表请求数据失败，可能是服务器开小差了");
+				         	myChart.hideLoading();    	
+				     	}
+				    })
+				
+				    myChart.setOption(option);	//载入图表
+					
+					
+                </script>
+                <!-- End of Superslide -->
+            </section>
+            <!-- END HOME -->
+            
+            <!-- BEGIN weiliao -->
+            <section id="weiliao" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="header-content">
+                            <h2>入口温度影响因素</h2>
+                        </div>
+                    </div>
+                </div>
+                <div id="weiliaol"  style=" height: 400px"></div>
+                <script src="js/echarts.min.js"></script>
+                <script src="js/jquery-1.10.2.min.js"></script>
+                <script type="text/javascript">
+
+                    var dom1 = document.getElementById("weiliaol");
+                    var myChart1 = echarts.init(dom1);
+                    var option = {
+                            	title:{ text:'主要测量指标'
+                            	},
+                                tooltip: {
+                                	trigger:'axis',
+                                    show: true
+                                },
+                               color:[
+                   					'#FF3333',	//生料喂料曲线颜色
+					                '#53FF53',	//窑尾喂料曲线颜色
+					                '#B15BFF',	//三次开阀图颜色
+					                '#68CFE8',	//入口温度图颜色
+                 				  ],
+                                legend: {
+                                	
+                                	show:true,
+                                    data:['生料喂料','窑尾喂煤','三次风阀','入口温度']
+								        }, 
+
+                 				  
+                 				toolbox: {
+               						feature: {
+                 						dataView: {show: true, readOnly: false},
+                 						magicType: {show: true, type: ['line', 'bar']},
+                 						restore: {show: true},
+                 						saveAsImage: {show: true}
+               							}
+             						},
+             						
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        data : []
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        name : '温度',
+                                        axisLabel : {
+	                            			 formatter: '{value} ℃'	//控制输出格式
+	                         				}
+                                        
+                                    },
+                                    
+                                    {
+	                    				//第二个（右边）Y轴，yAxisIndex为1
+	                         			type : 'value',
+	                        	 		name : '入口温度监控变量',
+	                       				scale: true,
+	                       				axisLabel : {
+	                                    formatter: '{value} 单位'
+	                         				}	
+	                     			}
+                                ],
+                                series : [
+                                    {
+		                  			  name:'生料喂料',
+		                    		  type:'bar',	//折线图表示（生成温度曲线）
+		                    		  symbol:'emptycircle',	//设置折线图中表示每个坐标点的符号；emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形	                    
+		                    		  yAxisIndex: 1,
+		                    		  data:[]		//数据值通过Ajax动态获取
+		                			},
+		                			
+		                			{
+		                    		  name:'窑尾喂煤',
+		                    		  type:'bar',
+		                    		  symbol:'emptyrect',
+		                    		   yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		                    		  name:'三次风阀',
+		                    		  type:'bar',
+		                    		  symbol:'emptyrect',
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		                    		  name:'入口温度',
+		                    		  type:'line',
+		                    		  symbol:'emptyrect',
+		                    		  data:[]
+		              				},
+		              				
+                                ]
+                            };
+                            
+                       myChart.showLoading();	//数据加载完之前先显示一段简单的loading动画
+		 
+						 var slwls=[];		//生料喂料数组（存放服务器返回的所有温度值）
+						 var ywwms=[];		//窑尾喂煤数组
+						 var scffs=[];		//三次风阀数组
+						 var rkwds=[];		//入口温度数组
+						 var dates1=[];		//日期数组
+						 
+						 
+				         $.ajax({	//使用JQuery内置的Ajax方法
+				         type : "post",		//post请求方式
+				         async : true,		//异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+				         url : "/mkcenter/bar.do",	//请求发送到IndexServlet处
+				         data : {name:"A0001"},		//请求内包含一个key为name，value为A0001的参数；服务器接收到客户端请求时通过request.getParameter方法获取该参数值
+				         dataType: "json",//返回数据形式为json
+				         success : function(result){
+				        	 //请求成功时执行该函数内容，result即为服务器返回的json对象
+					         if (result != null) {
+					                for(var i=0;i<10;i++){       
+					                   rkwds.push(result[i].l0001);		//挨个取出温度、湿度、压强等值并填入前面声明的温度、湿度、压强等数组
+					                   slwls.push(result[i].l0006);
+					                   ywwms.push(result[i].l0008);
+					                   scffs.push(result[i].l0012);
+					                   dates1.push(result[i].dateStr);
+					                }
+					                myChart1.hideLoading();	//隐藏加载动画
+					                
+					                myChart1.setOption({		//载入数据
+					   		         xAxis: {
+					   		             data: dates1	//填入X轴数据
+					   		         },
+					   		         series: [	//填入系列（内容）数据
+					   		               		{
+							   		             // 根据名字对应到相应的系列
+							   		             name: '生料喂料',
+							   		             data: slwls
+					   		         		},
+					   		               		{
+							   		             name: '窑尾喂煤',
+							   		             data: ywwms
+					   		         		},
+					   		         			{
+							   		             name: '三次风阀',
+							   		             data: scffs
+					   		         		},
+					   		         			{
+							   		             name: '入口温度',
+							   		             data: rkwds
+					   		         		}
+					   		        ]
+					   		     });
+					                
+					         }
+					         else {
+					        	 //返回的数据为空时显示提示信息
+					        	 alert("图表请求数据为空，可能服务器暂未录观测数据，您可以稍后再试！");
+					          	 myChart1.hideLoading();
+					         }
+				         
+						},
+				     	error : function(errorMsg) {
+				     		//请求失败时执行该函数
+				         	alert("图表请求数据失败，可能是服务器开小差了");
+				         	myChart1.hideLoading();    	
+				     	}
+				    })
+				
+				    myChart1.setOption(option);	//载入图表
+
+                </script>
+            </section>
+            <!-- END weiliao -->
+
+            <!-- BEGIN chanliang -->
+            <section id="chanliang" class="portfolio gray">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="header-content">
+                            <h2>风机入口压力详情</h2>
+                        </div>
+                    </div>
+                    <div id="chanliangtu"  style=" width: 1200px; height: 400px"></div>
+                <script src="js/echarts.min.js"></script>
+                <script src="js/jquery-1.10.2.min.js"></script>
+                    <script type="text/javascript">
+
+                                // 基于准备好的dom，初始化echart2图表
+                                var myChart2 = echarts.init(document.getElementById('chanliangtu'));
+
+                                var option = {
+                            	title:{ text:'主要测量指标'
+                         		},
+                                tooltip: {
+                                	trigger:'axis',
+                                    show: true
+                                },
+                               color:[
+                   					'#FF3333',	//高温风机入口压力曲线颜色
+					                '#53FF53',	//高温风机转速颜色
+					                '#B15BFF',	//生料喂料量图颜色
+                 				  ],
+                                legend: {
+                                	
+                                	show:true,
+                                    data:['高温风机入口压力','高温风机转速','生料喂料量']
+								        }, 
+
+                 				  
+                 				toolbox: {
+               						feature: {
+                 						dataView: {show: true, readOnly: false},
+                 						magicType: {show: true, type: ['line', 'bar']},
+                 						restore: {show: true},
+                 						saveAsImage: {show: true}
+               							}
+             						},
+             						
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        data : []
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        name : '压力',
+                                        axisLabel : {
+	                            			 formatter: '{value} Pa'	//控制输出格式
+	                         				}
+                                        
+                                    },
+                                    
+                                    {
+	                    				//第二个（右边）Y轴，yAxisIndex为1
+	                         			type : 'value',
+	                        	 		name : '单位量',
+	                       				scale: true,
+	                       				axisLabel : {
+	                                    formatter: '{value} 单位'
+	                         				}	
+	                     			}
+                                ],
+                                series : [
+                                    {
+		                  			  name:'高温风机入口压力',
+		                    		  type:'line',	//折线图表示（生成温度曲线）
+		                    		  symbol:'emptycircle',	//设置折线图中表示每个坐标点的符号；emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形	                    
+		                    		  yAxisIndex: 1,
+		                    		  data:[]		//数据值通过Ajax动态获取
+		                			},
+		                			
+		                			{
+		                    		  name:'高温风机转速',
+		                    		  type:'bar',
+		                    		  symbol:'emptyrect',
+		                    		   yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		                    		  name:'生料喂料量',
+		                    		  type:'bar',
+		                    		  symbol:'emptyrect',
+		                    		  data:[]
+		              				},
+		              				
+                                ]
+                            };
+                            
+                       myChart2.showLoading();	//数据加载完之前先显示一段简单的loading动画
+		 
+						 var gwfjrkyls=[];		//高温风机入口压力数组（存放服务器返回的所有温度值）
+						 var gwfjzss=[];		//高温风机转速数组
+						 var slwlls=[];		//生料喂料量数组
+						 var dates2=[];		//日期数组
+						 
+						 
+				         $.ajax({	//使用JQuery内置的Ajax方法
+				         type : "post",		//post请求方式
+				         async : true,		//异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+				         url : "/mkcenter/bar.do",	//请求发送到IndexServlet处
+				         data : {name:"A0001"},		//请求内包含一个key为name，value为A0001的参数；服务器接收到客户端请求时通过request.getParameter方法获取该参数值
+				         dataType: "json",//返回数据形式为json
+				         success : function(result){
+				        	 //请求成功时执行该函数内容，result即为服务器返回的json对象
+					         if (result != null) {
+					                for(var i=0;i<10;i++){       
+					                   gwfjrkyls.push(result[i].l0003);		//挨个取出温度、湿度、压强等值并填入前面声明的温度、湿度、压强等数组
+					                   gwfjzss.push(result[i].l0010);
+					                   slwlls.push(result[i].l0006);
+					                   dates2.push(result[i].dateStr);
+					                }
+					                myChart2.hideLoading();	//隐藏加载动画
+					                
+					                myChart2.setOption({		//载入数据
+					   		         xAxis: {
+					   		             data: dates2	//填入X轴数据
+					   		         },
+					   		         series: [	//填入系列（内容）数据
+					   		               		{
+							   		             // 根据名字对应到相应的系列
+							   		             name: '高温风机入口压力',
+							   		             data: gwfjrkyls
+					   		         		},
+					   		               		{
+							   		             name: '高温风机转速',
+							   		             data: gwfjzss
+					   		         		},
+					   		         			{
+							   		             name: '生料喂料量',
+							   		             data: slwlls
+					   		         		}
+					   		        ]
+					   		     });
+					                
+					         }
+					         else {
+					        	 //返回的数据为空时显示提示信息
+					        	 alert("图表请求数据为空，可能服务器暂未录观测数据，您可以稍后再试！");
+					          	 myChart2.hideLoading();
+					         }
+				         
+						},
+				     	error : function(errorMsg) {
+				     		//请求失败时执行该函数
+				         	alert("图表请求数据失败，可能是服务器开小差了");
+				         	myChart2.hideLoading();    	
+				     	}
+				    })
+				
+                                myChart2.setOption(option);
+
+                    </script>
+
+                </div>
+                <br>
+                <br><br><br>
+            </section>
+
+
+            <!-- END chanliang -->
+
+
+            <!-- BEGIN zaihe -->
+            <section id="zaihe" class="testimonial">
+                
+                <div class="row">
+                    <div class="col-md-12 mg-bt-80">
+                        <div class="header-content">
+                            <h2>实时载荷</h2>
+                        </div>
+                    </div>
+                </div>
+
+                    <div id="zaihetu"  style=" height:300%"></div>
+                 <script src="js/echarts.min.js"></script>
+                <script src="js/jquery-1.10.2.min.js"></script>
+                       
+                    <script type="text/javascript">
+
+                        // 基于准备好的dom，初始化echart1图表
+                        var dom = document.getElementById("zaihetu");
+                        var myChart3 = echarts.init(dom);
+						var option = {
+                            	title:{ text:'主要测量指标'
+                         		},
+                                tooltip: {
+                                	trigger:'axis',
+                                    show: true
+                                },
+                               color:[
+                   					'#FF3333',	//分解炉出口氧气含量曲线颜色
+					                '#53FF53',	//高温风机转速颜色
+					                '#B15BFF',	//窑尾喂煤量图颜色
+                 				  ],
+                                legend: {
+                                	
+                                	show:true,
+                                    data:['分解炉出口氧气含量','高温风机转速','窑尾喂煤量']
+								        }, 
+
+                 				  
+                 				toolbox: {
+               						feature: {
+                 						dataView: {show: true, readOnly: false},
+                 						magicType: {show: true, type: ['line', 'bar']},
+                 						restore: {show: true},
+                 						saveAsImage: {show: true}
+               							}
+             						},
+             						
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        data : []
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        name : '氧气含量',
+                                        axisLabel : {
+	                            			 formatter: '{value} %'	//控制输出格式
+	                         				}
+                                        
+                                    },
+                                    
+                                    {
+	                    				//第二个（右边）Y轴，yAxisIndex为1
+	                         			type : 'value',
+	                        	 		name : '单位量',
+	                       				scale: true,
+	                       				axisLabel : {
+	                                    formatter: '{value} 单位'
+	                         				}	
+	                     			}
+                                ],
+                                series : [
+                                    {
+		                  			  name:'分解炉出口氧气含量',
+		                    		  type:'line',	//折线图表示（生成温度曲线）
+		                    		  symbol:'emptycircle',	//设置折线图中表示每个坐标点的符号；emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形	                    
+		                    		  
+		                    		  data:[]		//数据值通过Ajax动态获取
+		                			},
+		                			
+		                			{
+		                    		  name:'高温风机转速',
+		                    		  type:'bar',
+		                    		  symbol:'emptyrect',
+		                    		  yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+		              				
+		              				{
+		                    		  name:'窑尾喂煤量',
+		                    		  type:'bar',
+		                    		  symbol:'emptyrect',
+		                    		  yAxisIndex: 1,
+		                    		  data:[]
+		              				},
+		              				
+                                ]
+                            };
+                            
+                       myChart3.showLoading();	//数据加载完之前先显示一段简单的loading动画
+		 
+						 var fjlckyqs=[];		//高温风机入口压力数组（存放服务器返回的所有温度值）
+						 var gwfjzss1=[];		//高温风机转速数组
+						 var ywwmls1=[];		//生料喂料量数组
+						 var dates3=[];		//日期数组
+						 
+						 
+				         $.ajax({	//使用JQuery内置的Ajax方法
+				         type : "post",		//post请求方式
+				         async : true,		//异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+				         url : "/mkcenter/bar.do",	//请求发送到IndexServlet处
+				         data : {name:"A0001"},		//请求内包含一个key为name，value为A0001的参数；服务器接收到客户端请求时通过request.getParameter方法获取该参数值
+				         dataType: "json",//返回数据形式为json
+				         success : function(result){
+				        	 //请求成功时执行该函数内容，result即为服务器返回的json对象
+					         if (result != null) {
+					                for(var i=0;i<10;i++){       
+					                   fjlckyqs.push(result[i].l0004);		//挨个取出温度、湿度、压强等值并填入前面声明的温度、湿度、压强等数组
+					                   gwfjzss1.push(result[i].l0010);
+					                   ywwmls1.push(result[i].l0008);
+					                   dates3.push(result[i].dateStr);
+					                }
+					                myChart3.hideLoading();	//隐藏加载动画
+					                
+					                myChart3.setOption({		//载入数据
+					   		         xAxis: {
+					   		             data: dates3	//填入X轴数据
+					   		         },
+					   		         series: [	//填入系列（内容）数据
+					   		               		{
+							   		             // 根据名字对应到相应的系列
+							   		             name: '分解炉出口氧气含量',
+							   		             data: fjlckyqs
+					   		         		},
+					   		               		{
+							   		             name: '高温风机转速',
+							   		             data: gwfjzss1
+					   		         		},
+					   		         			{
+							   		             name: '窑尾喂煤量',
+							   		             data: ywwmls1
+					   		         		}
+					   		        ]
+					   		     });
+					                
+					         }
+					         else {
+					        	 //返回的数据为空时显示提示信息
+					        	 alert("图表请求数据为空，可能服务器暂未录观测数据，您可以稍后再试！");
+					          	 myChart3.hideLoading();
+					         }
+				         
+						},
+				     	error : function(errorMsg) {
+				     		//请求失败时执行该函数
+				         	alert("图表请求数据失败，可能是服务器开小差了");
+				         	myChart3.hideLoading();    	
+				     	}
+				    })
+				
+                                myChart3.setOption(option);
+                    </script>
+
+
+                
+            </section>
+            <!-- END zaihe -->
+            
+            <!-- BEGIN nenghao -->
+            <section id="nenghao" class="about gray">
+                <div class="row">
+                    <div class="col-md-12 mg-bt-80">
+                        <div class="header-content">
+                            <h2>能耗占比</h2>
+                            <h3>各种能源消耗占比</h3>
+                        </div>
+                    </div>
+                </div>
+                    <div id="nenghaotu"  style=" width: 1200px; height: 400px"></div>
+                    <script src="js/echarts.min.js"></script>
+                    <script type="text/javascript">
+
+                                // 基于准备好的dom，初始化echart1图表
+                                var myChart4 = echarts.init(document.getElementById('nenghaotu'));
+
+                                var option = {
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                                    },
+                                    legend: {
+                                        orient: 'vertical',
+                                        x: 'left',
+                                        data:['工序一','工序二','工序三','工序三','工序五']
+                                    },
+                                    series: [
+                                        {
+                                            name:'访问来源',
+                                            type:'pie',
+                                            radius: ['50%', '70%'],
+                                            avoidLabelOverlap: false,
+                                            label: {
+                                                normal: {
+                                                    show: false,
+                                                    position: 'center'
+                                                },
+                                                emphasis: {
+                                                    show: true,
+                                                    textStyle: {
+                                                        fontSize: '30',
+                                                        fontWeight: 'bold'
+                                                    }
+                                                }
+                                            },
+                                            labelLine: {
+                                                normal: {
+                                                    show: false
+                                                }
+                                            },
+                                            data:[
+                                                {value:335, name:'工序一'},
+                                                {value:310, name:'工序二'},
+                                                {value:234, name:'工序三'},
+                                                {value:135, name:'工序四'},
+                                                {value:1548, name:'工序五'}
+                                            ]
+                                        }
+                                    ]
+                                };
+
+                                myChart4.setOption(option);
+
+                    </script>
+
+            </section>
+            <!-- END nenghao -->
+            
+
+
+            <!-- BEGIN 能耗电压 -->
+            <section id="dianyadianliu" class="blog-front gray">
+                <div class="row">
+                    <div class="col-md-12 mg-bt-80">
+                        <div class="header-content">
+                            <h2>能耗-电流电压</h2>
+                            <h3>一日电流电压情况</h3>
+                        </div>
+                    </div>
+
+                    <article class="col-md-6 col-sm-6 ">
+                        <div id="dianliutu"  style=" height: 400px"></div>
+                        <script src="js/echarts.min.js"></script>
+                        <script type="text/javascript">
+
+                            // 基于准备好的dom，初始化echart1图表
+                            var myChart5 = echarts.init(document.getElementById('dianliutu'));
+
+                            var option = {
+                                title: {
+                                    text: '一天用电流分布',
+
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    axisPointer: {
+                                        type: 'cross'
+                                    }
+                                },
+                                toolbox: {
+                                    show: true,
+                                    feature: {
+                                        saveAsImage: {}
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+                                },
+                                yAxis: {
+                                    type: 'value',
+                                    axisLabel: {
+                                        formatter: '{value} W'
+                                    },
+                                    axisPointer: {
+                                        snap: true
+                                    }
+                                },
+                                visualMap: {
+                                    show: false,
+                                    dimension: 0,
+                                    pieces: [{
+                                        lte: 6,
+                                        color: 'green'
+                                    }, {
+                                        gt: 6,
+                                        lte: 8,
+                                        color: 'red'
+                                    }, {
+                                        gt: 8,
+                                        lte: 14,
+                                        color: 'green'
+                                    }, {
+                                        gt: 14,
+                                        lte: 17,
+                                        color: 'red'
+                                    }, {
+                                        gt: 17,
+                                        color: 'green'
+                                    }]
+                                },
+                                series: [
+                                    {
+                                        name: '用电量',
+                                        type: 'line',
+                                        smooth: true,
+                                        data: [300, 280, 250, 260, 270, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+                                        markArea: {
+                                            data: [[{
+                                                name: '早高峰',
+                                                xAxis: '07:30'
+                                            }, {
+                                                xAxis: '10:00'
+                                            }], [{
+                                                name: '晚高峰',
+                                                xAxis: '17:30'
+                                            }, {
+                                                xAxis: '21:15'
+                                            }]]
+                                        }
+                                    }
+                                ]
+                            };
+                            myChart5.setOption(option);
+
+                        </script>
+                    </article>
+
+                    <article class="col-md-6 col-sm-6">
+                        <div id="dianyatu"  style="  height: 400px"></div>
+                        <script src="js/echarts.min.js"></script>
+                        <script type="text/javascript">
+
+                            // 基于准备好的dom，初始化echart1图表
+                            var myChart6 = echarts.init(document.getElementById('dianyatu'));
+
+                            var option = {
+                                title: {
+                                    text: '一天电压分布',
+
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    axisPointer: {
+                                        type: 'cross'
+                                    }
+                                },
+                                toolbox: {
+                                    show: true,
+                                    feature: {
+                                        saveAsImage: {}
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+                                },
+                                yAxis: {
+                                    type: 'value',
+                                    axisLabel: {
+                                        formatter: '{value} W'
+                                    },
+                                    axisPointer: {
+                                        snap: true
+                                    }
+                                },
+                                visualMap: {
+                                    show: false,
+                                    dimension: 0,
+                                    pieces: [{
+                                        lte: 6,
+                                        color: 'green'
+                                    }, {
+                                        gt: 6,
+                                        lte: 8,
+                                        color: 'red'
+                                    }, {
+                                        gt: 8,
+                                        lte: 14,
+                                        color: 'green'
+                                    }, {
+                                        gt: 14,
+                                        lte: 17,
+                                        color: 'red'
+                                    }, {
+                                        gt: 17,
+                                        color: 'green'
+                                    }]
+                                },
+                                series: [
+                                    {
+                                        name: '用电量',
+                                        type: 'line',
+                                        smooth: true,
+                                        data: [300, 280, 250, 260, 270, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+                                        markArea: {
+                                            data: [[{
+                                                name: '早高峰',
+                                                xAxis: '07:30'
+                                            }, {
+                                                xAxis: '10:00'
+                                            }], [{
+                                                name: '晚高峰',
+                                                xAxis: '17:30'
+                                            }, {
+                                                xAxis: '21:15'
+                                            }]]
+                                        }
+                                    }
+                                ]
+                            };
+                            myChart6.setOption(option);
+
+                        </script>
+                    </article>
+
+                </div>
+
+            </section>
+            <!-- END BLOG -->            
+
+
+            <!-- BEGIN FOOTER -->
+            <footer>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <p>
+                            © More information <a href="http://www.baidu.com" target="_blank" title="模板之家">浙大工业工程</a>
+                        </p>                        
+                    </div>
+                </div>
+            </footer>
+            <!-- END FOOTER -->
+        </div>
+    </div>
+
+
+    <!-- Back to top -->
+    <div id="backtotop">       
+        <a class="to-top-btn sscroll" href="index.html#home"><i class="fa fa-angle-double-up"></i></a>
+    </div>
+    <script language="JavaScript">
+        function myrefresh(){
+            window.location.reload();
+        }
+        setTimeout('myrefresh()',60000); //指定1秒刷新一次
+    </script>
+
+
+    <!-- Library Scripts -->
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/lib/jquery.preloader.js"></script>
+    <script src="js/lib/nivo-lightbox.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/lib/jquery.superslides.min.js"></script>
+    <script src="js/lib/smoothscroll.js"></script>
+    <script src="js/lib/jquery.sudoslider.min.js"></script>
+    <script src="js/lib/jquery.bxslider.min.js"></script>
+    <script src="js/lib/jquery.mixitup.min.js"></script>
+    <script src="js/lib/jquery.backtotop.js"></script>
+    <script src="js/lib/jquery.carouFredSel-6.2.1-packed.js"></script>
+    <script src="js/lib/retina.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+	
+
+    <!-- Custom Script -->    
+    <script src="js/main.js"></script>
+</body>
+
+</html>

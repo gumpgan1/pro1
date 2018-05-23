@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="main/java/|main/resources/|test/java/|test/resources/" kind="src" path="src"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/JSONObject运行必备Jar包/commons-beanutils-1.9.2.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/JSONObject运行必备Jar包/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/JSONObject运行必备Jar包/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/JSONObject运行必备Jar包/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/JSONObject运行必备Jar包/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/JSONObject运行必备Jar包/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/【批量下载】slf4j-log4j12-1.7.10等/共享资源/jar/gson/gson-2.0.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/【批量下载】slf4j-log4j12-1.7.10等/共享资源/jar/gson/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/【批量下载】slf4j-log4j12-1.7.10等/共享资源/jar/gson/slf4j-api-1.7.10.jar"/>
+	<classpathentry kind="lib" path="G:/下了就没用的/【批量下载】slf4j-log4j12-1.7.10等/共享资源/jar/gson/slf4j-log4j12-1.7.10.jar"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
+</classpath>
